@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :osx, '11.5'
 
 
 project 'Yippy', {
@@ -17,28 +17,28 @@ target 'Yippy' do
     # Pods for Yippy
     pod 'Default'
     pod 'LoginServiceKit', :git => 'https://github.com/Clipy/LoginServiceKit.git'
-    pod 'RxSwift', '~> 5'
-    pod 'RxCocoa', '~> 5'
+    pod 'RxSwift', '~> 6.8.0'
+    pod 'RxCocoa', '~> 6.8.0'
 
     target 'YippyTests' do
         inherit! :search_paths
         # Pods for testing
-        pod 'RxBlocking', '~> 5'
-        pod 'RxTest', '~> 5'
+        pod 'RxBlocking', '~> 6.8.0'
+        pod 'RxTest', '~> 6.8.0'
         pod 'Default'
         pod 'LoginServiceKit', :git => 'https://github.com/Clipy/LoginServiceKit.git'
-        pod 'RxSwift', '~> 5'
-        pod 'RxCocoa', '~> 5'
+        pod 'RxSwift', '~> 6.8.0'
+        pod 'RxCocoa', '~> 6.8.0'
     end
 
     target 'YippyUITests' do
         inherit! :search_paths
         # Pods for testing
-        pod 'RxBlocking', '~> 5'
-        pod 'RxTest', '~> 5'
+        pod 'RxBlocking', '~> 6.8.0'
+        pod 'RxTest', '~> 6.8.0'
         pod 'Default'
         pod 'LoginServiceKit', :git => 'https://github.com/Clipy/LoginServiceKit.git'
-        pod 'RxSwift', '~> 5'
-        pod 'RxCocoa', '~> 5'
+        pod 'RxSwift', '~> 6.8.0'
+        pod 'RxCocoa', '~> 6.8.0'
     end
 end

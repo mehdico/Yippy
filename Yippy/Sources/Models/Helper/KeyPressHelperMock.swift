@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Carbon
 
 class KeyPressHelperMock: KeyPressHelper {
     
