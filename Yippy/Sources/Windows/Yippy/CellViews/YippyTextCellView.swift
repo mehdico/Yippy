@@ -12,7 +12,7 @@ class YippyTextCellView: YippyItemBaseCellView, YippyItem {
     
     // MARK: - UI Constants
     
-    static let padding = NSEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+    static let padding = NSEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
     
     static let textInset = NSEdgeInsetsZero // NSEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
     
