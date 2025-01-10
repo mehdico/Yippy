@@ -13,7 +13,7 @@ struct Constants {
     
     struct panel {
         static let menuWidth: CGFloat = 400
-        static let menuHeight: CGFloat = 300
+        static let menuHeight: CGFloat = 420
         static let maxCellHeight: CGFloat = 200
     }
     

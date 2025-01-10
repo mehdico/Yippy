@@ -23,11 +23,11 @@ enum PanelPosition: Int, Codable, CaseIterable {
     public func getFrame(forScreen screen: NSScreen) -> NSRect {
         switch self {
         case .right:
-            return NSRect(x: screen.frame.maxX - Constants.panel.menuWidth, y: screen.frame.minY, width: Constants.panel.menuWidth, height: screen.frame.height)
+            return NSRect(x: screen.frame.maxX - Constants.panel.menuWidth, y: screen.frame.minY, width: Constants.panel.menuWidth, height: screen.visibleFrame.height)
         case .left:
-            return NSRect(x: screen.frame.minX, y: screen.frame.minY, width: Constants.panel.menuWidth, height: screen.frame.height)
+            return NSRect(x: screen.frame.minX, y: screen.frame.minY, width: Constants.panel.menuWidth, height: screen.visibleFrame.height)
         case .top:
-            return NSRect(x: screen.frame.minX, y: screen.frame.maxY - Constants.panel.menuHeight, width: screen.frame.width, height: Constants.panel.menuHeight)
+            return NSRect(x: screen.frame.minX, y: screen.visibleFrame.maxY - Constants.panel.menuHeight, width: screen.frame.width, height: Constants.panel.menuHeight)
         case .bottom:
             return NSRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.frame.width, height: Constants.panel.menuHeight)
         case .centerExtraSmall:
