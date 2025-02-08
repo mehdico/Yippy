@@ -17,7 +17,7 @@ struct Results {
     let isSearchResult: Bool
 }
 
-class YippyViewController: NSViewController {
+class YippyViewController: NSViewController, NSWindowDelegate {
     
     @IBOutlet var yippyHistoryView: YippyTableView!
     
@@ -41,6 +41,8 @@ class YippyViewController: NSViewController {
     let results = BehaviorRelay(value: Results(items: [], isSearchResult: false))
     let selected = BehaviorRelay<Int?>(value: nil)
     
+    var globalMonitor: Any?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,7 +61,7 @@ class YippyViewController: NSViewController {
             results,
             selected.distinctUntilChanged().withPrevious(startWith: nil)
         )
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: onAllChange)
             .disposed(by: disposeBag)
         
@@ -130,6 +132,25 @@ class YippyViewController: NSViewController {
         
         isPreviewShowing = false
         resetSelected()
+        
+        // Add global mouse down monitor
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
+            guard let self = self, let window = self.view.window else { return }
+            let mouseLocation = NSEvent.mouseLocation
+            if !window.frame.contains(mouseLocation) {
+                self.close()
+            }
+        }
+    }
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        
+        // Remove the global monitor
+        if let monitor = globalMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalMonitor = nil
+        }
     }
     
     func resetSelected() {
