@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :osx, '11.5'
+platform :osx, '13'
 
 
 project 'Yippy', {
