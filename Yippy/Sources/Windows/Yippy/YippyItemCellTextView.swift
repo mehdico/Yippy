@@ -12,6 +12,7 @@ import Cocoa
 class YippyItemCellTextView: NSTextView {
     
     override func mouseDown(with event: NSEvent) {
+        // Pass the mouse event up the responder chain to ensure it reaches the table view
         self.nextResponder?.mouseDown(with: event)
     }
     

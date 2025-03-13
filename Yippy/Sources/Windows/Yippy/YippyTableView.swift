@@ -45,7 +45,38 @@ class YippyTableView: NSTableView {
         delegate = self
         dataSource = self
         
+        // Set up double click action
+        doubleAction = #selector(handleDoubleClick)
+        
         registerForDraggedTypes([HistoryItem.historyItemIdType])
+    }
+    
+    @objc func handleDoubleClick() {
+        let selectedRow = self.selectedRow
+        if selectedRow >= 0 {
+            // Paste the selected item on double click
+            if let delegate = yippyDelegate as? YippyViewController {
+                delegate.pasteSelected()
+            }
+        }
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        let row = row(at: point)
+        
+        if row >= 0 {
+            // Select the clicked row
+            selectItem(row)
+            
+            // Notify delegate about selection change
+            if let delegate = yippyDelegate {
+                delegate.yippyTableView(self, selectedDidChange: row)
+            }
+        }
+        
+        // Let the table view handle the event normally
+        super.mouseDown(with: event)
     }
     
     var selected: Int? {
