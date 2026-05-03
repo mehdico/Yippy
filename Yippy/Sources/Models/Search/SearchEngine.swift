@@ -9,112 +9,79 @@
 import Foundation
 
 struct SearchQuery: Hashable, Equatable {
-    
+
     var query: String
-    
-    // Enfore the data invariant
+
     private init(query: String) {
         self.query = query
     }
-    
+
     static func fromRawText(_ str: String) -> SearchQuery {
         return SearchQuery(query: str)
     }
 }
 
 public class SearchResult {
-    
+
     var query: SearchQuery
-    var results: [Int] = []
+    var results: [Int]
     var items: Int
-    var completed: Int = 0
-    
-    var isFinished: Bool {
-        return completed == items
-    }
-    
-    init(query: SearchQuery, items: Int) {
+
+    var isFinished: Bool { return true }
+
+    init(query: SearchQuery, items: Int, results: [Int] = []) {
         self.query = query
         self.items = items
-    }
-    
-    func addResult(_ i: Int) {
-        results.append(i)
-        results.sort()
-        completed += 1
-    }
-    
-    func recordFailure() {
-        completed += 1
+        self.results = results
     }
 }
 
 public class SearchEngine {
-    
-    var results = [SearchQuery: SearchResult]()
-    
-    var inProgress = [SearchQuery]()
-    
-    var sem = DispatchSemaphore(value: 1)
-    
+
+    private var cache = [SearchQuery: SearchResult]()
+    private let cacheQueue = DispatchQueue(label: "yippy.search.cache")
+    private let workQueue = DispatchQueue(label: "yippy.search.work", qos: .userInitiated)
+
     var data: [String]
-    
+
     init(data: [String]) {
         self.data = data
     }
-    
+
     public func search(query: String, completion: @escaping (SearchResult) -> Void) {
         let searchQuery = SearchQuery.fromRawText(query)
-        
-        if let result = findResult(forQuery: searchQuery) {
-            return completion(result)
-        }
-        
-        DispatchQueue.global().async {
-            self.sem.wait()
-            self.inProgress.append(searchQuery)
-            self.sem.signal()
-            
-            // Do something
-            let resSem = DispatchSemaphore(value: 1)
-            let searchResult = SearchResult(query: searchQuery, items: self.data.count)
-            for (i, d) in self.data.enumerated() {
-                DispatchQueue.global().async {
-                    if performSearch(needle: searchQuery.query, haystack: d) {
-                        resSem.wait()
-                        searchResult.addResult(i)
-                        resSem.signal()
-                    }
-                    else {
-                        resSem.wait()
-                        searchResult.recordFailure()
-                        resSem.signal()
-                    }
-                }
-            }
-            
-            self.finishSearch(searchResult: searchResult, update: completion) {
-                self.sem.wait()
-                self.inProgress.removeAll(where: {$0 == searchQuery})
-                self.results[searchQuery] = searchResult
-                self.sem.signal()
-            }
-        }
-    }
-    
-    private func finishSearch(searchResult: SearchResult, update: @escaping (SearchResult) -> (), completion: @escaping () -> ()) {
-        if searchResult.isFinished {
-            update(searchResult)
-            completion()
+
+        if query.isEmpty {
+            completion(SearchResult(query: searchQuery, items: data.count))
             return
         }
-        
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 0.1, execute: {
-            self.finishSearch(searchResult: searchResult, update: update, completion: completion)
-        })
-    }
-    
-    private func findResult(forQuery query: SearchQuery) -> SearchResult? {
-        return results[query]
+
+        if let cached = cacheQueue.sync(execute: { cache[searchQuery] }) {
+            completion(cached)
+            return
+        }
+
+        let snapshot = data
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            // Score every item, drop misses, sort by score descending. Ties break by
+            // index ascending (clipboard history is newest-first, so newer wins).
+            var scored: [(index: Int, score: Int)] = []
+            scored.reserveCapacity(snapshot.count)
+            for (i, str) in snapshot.enumerated() {
+                if let score = fuzzyScore(needle: query, haystack: str) {
+                    scored.append((i, score))
+                }
+            }
+            scored.sort { lhs, rhs in
+                if lhs.score != rhs.score { return lhs.score > rhs.score }
+                return lhs.index < rhs.index
+            }
+
+            let result = SearchResult(query: searchQuery, items: snapshot.count, results: scored.map { $0.index })
+            self.cacheQueue.sync { self.cache[searchQuery] = result }
+            DispatchQueue.main.async { completion(result) }
+        }
     }
 }

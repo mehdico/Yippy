@@ -53,17 +53,12 @@ class YippyTiffCellView: YippyItemBaseCellView, YippyItem {
         }
         
         let imageWidth = cellWidth - imagePadding.xTotal - contentViewInsets.xTotal
-        
-        // Get max image height based on pixels
-        let maxImageHeight = image.size.height
-        // Calcalute image height
+
+        let maxImageHeight = Constants.panel.maxCellHeight
         let imageHeight = min(image.size.height * imageWidth / image.size.width, maxImageHeight)
-        
-        // Get max height of cell based on visible on visible height
-        let maxHeight = yippyTableView.visibleRect.height
-        // Calculate cell height
-        let height = min(imageHeight + imagePadding.yTotal + contentViewInsets.xTotal, maxHeight)
-        
+
+        let height = imageHeight + imagePadding.yTotal + contentViewInsets.xTotal
+
         return ceil(height)
     }
     

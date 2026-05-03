@@ -30,8 +30,7 @@ class PreviewTextViewController: NSViewController, PreviewViewController {
         
         view.wantsLayer = true
         view.layer?.cornerRadius = 10
-        view.layer?.borderWidth = padding.left
-        
+
         topPaddingConstraint.constant = padding.top
         bottomPaddingConstraint.constant = padding.bottom
         rightPaddingConstraint.constant = padding.right
@@ -55,19 +54,21 @@ class PreviewTextViewController: NSViewController, PreviewViewController {
     }
     
     func calculateWindowFrame(forText text: NSAttributedString) -> NSRect {
-        let maxWindowWidth = NSScreen.main!.frame.width * 0.8
-        let maxWindowHeight = NSScreen.main!.frame.height * 0.8
-        
+        let screenFrame = (view.window?.screen ?? NSScreen.main ?? NSScreen.screens.first)?.frame
+            ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
+        let maxWindowWidth = screenFrame.width * 0.8
+        let maxWindowHeight = screenFrame.height * 0.8
+
         let maxTextContainerWidth = maxWindowWidth - padding.xTotal - textView.textContainerInset.width * 2
-        
+
         let bRect = text.calculateSize(withMaxWidth: maxTextContainerWidth)
-        
+
         let windowWidth = bRect.width + padding.xTotal + textView.textContainerInset.width * 2
-        
+
         let windowHeight = min(maxWindowHeight, bRect.height + padding.yTotal + textView.textContainerInset.height * 2)
-        
-        let center = NSPoint(x: NSScreen.main!.frame.midX - windowWidth / 2, y: NSScreen.main!.frame.midY - windowHeight / 2)
-        
+
+        let center = NSPoint(x: screenFrame.midX - windowWidth / 2, y: screenFrame.midY - windowHeight / 2)
+
         return NSRect(origin: center, size: NSSize(width: windowWidth, height: windowHeight))
     }
 }

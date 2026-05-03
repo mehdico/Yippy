@@ -9,8 +9,12 @@
 import Foundation
 
 protocol YippyTableViewDelegate {
-    
+
     func yippyTableView(_ yippyTableView: YippyTableView, selectedDidChange selected: Int?)
-    
+
     func yippyTableView(_ yippyTableView: YippyTableView, didMoveItem from: Int, to: Int)
+
+    func yippyTableView(_ yippyTableView: YippyTableView, pasteItemAt row: Int)
+
+    func yippyTableView(_ yippyTableView: YippyTableView, deleteItemAt row: Int)
 }

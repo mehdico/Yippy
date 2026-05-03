@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -930,15 +930,15 @@
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SkR-Tc-nlq">
                                 <rect key="frame" x="5" y="5" width="470" height="260"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="uDP-iD-cmW">
-                                    <rect key="frame" x="0.0" y="0.0" width="455" height="260"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="470" height="260"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Pw5-Af-jXA">
-                                            <rect key="frame" x="0.0" y="0.0" width="455" height="260"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="470" height="260"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="455" height="260"/>
+                                            <size key="minSize" width="470" height="260"/>
                                             <size key="maxSize" width="480" height="10000000"/>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -949,7 +949,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="v7Z-bB-vms">
-                                    <rect key="frame" x="455" y="0.0" width="15" height="260"/>
+                                    <rect key="frame" x="453" y="0.0" width="17" height="260"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -1020,11 +1020,11 @@
                                             <size key="maxSize" width="399" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment>
-                                                    <string key="content">Written and maintained by Matthew Davidson. Icons by David Waters.
+                                                    <string key="content">Maintained by Mahdi Moosavi.
 
-Source code available at: https://github.com/mattDavo/Yippy
+Based on Yippy by Matthew Davidson. Icons by David Waters.
 
-Website: https://yippy.mattdavo.com</string>
+https://github.com/mehdico/Yippy</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" metaFont="system"/>
@@ -1087,7 +1087,7 @@ Website: https://yippy.mattdavo.com</string>
                             </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0bn-y0-I1O">
                                 <rect key="frame" x="18" y="90" width="414" height="24"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Thank you for downloading Yippy!" id="J8m-Ct-kEv">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Welcome to Yippy" id="J8m-Ct-kEv">
                                     <font key="font" metaFont="system" size="20"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1095,14 +1095,14 @@ Website: https://yippy.mattdavo.com</string>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ili-Q1-k3U">
                                 <rect key="frame" x="18" y="50" width="414" height="32"/>
-                                <textFieldCell key="cell" alignment="center" title="For Yippy to be able to paste into your applications it requires you to provide it with full control to your computer." id="YWR-Ur-mdX">
+                                <textFieldCell key="cell" alignment="center" title="Yippy needs accessibility access to paste your clipboard history into other apps. Click below to grant permission." id="YWR-Ur-mdX">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2gX-zW-UTr">
-                                <rect key="frame" x="168" y="9" width="114" height="38"/>
+                                <rect key="frame" x="173" y="16" width="104" height="26"/>
                                 <buttonCell key="cell" type="push" title="Allow Access" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="S68-2Z-YZi">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1181,11 +1181,11 @@ Website: https://yippy.mattdavo.com</string>
             <objects>
                 <viewController id="Voc-fT-dUv" customClass="WaitingViewController" customModule="Yippy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="tkz-fh-OxE">
-                        <rect key="frame" x="0.0" y="0.0" width="457" height="252"/>
+                        <rect key="frame" x="0.0" y="0.0" width="457" height="256"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="US1-sf-gtU">
-                                <rect key="frame" x="120" y="84" width="217" height="29"/>
+                                <rect key="frame" x="120" y="88" width="217" height="29"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Waiting for control..." id="rqa-v5-s1A">
                                     <font key="font" metaFont="system" size="25"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1195,7 +1195,7 @@ Website: https://yippy.mattdavo.com</string>
                                 <accessibility identifier="waitingForControlLabel"/>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eYw-Dd-YQZ">
-                                <rect key="frame" x="18" y="60" width="421" height="16"/>
+                                <rect key="frame" x="18" y="64" width="421" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="417" id="IoB-HR-7l5"/>
                                 </constraints>
@@ -1206,7 +1206,7 @@ Website: https://yippy.mattdavo.com</string>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eAI-s8-ayO">
-                                <rect key="frame" x="172" y="13" width="114" height="32"/>
+                                <rect key="frame" x="177" y="20" width="103" height="24"/>
                                 <buttonCell key="cell" type="push" title="Allow Access" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hCz-fJ-Af5">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1216,7 +1216,7 @@ Website: https://yippy.mattdavo.com</string>
                                 </connections>
                             </button>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-Fe-mqy">
-                                <rect key="frame" x="173" y="121" width="111" height="111"/>
+                                <rect key="frame" x="173" y="125" width="111" height="111"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="111" id="UKA-nb-Sh5"/>
                                     <constraint firstAttribute="width" constant="111" id="VAB-zM-X2s"/>
@@ -1247,11 +1247,11 @@ Website: https://yippy.mattdavo.com</string>
             <objects>
                 <viewController id="Qra-K0-lj6" sceneMemberID="viewController">
                     <view key="view" id="7iQ-JE-siG">
-                        <rect key="frame" x="0.0" y="0.0" width="568" height="468"/>
+                        <rect key="frame" x="0.0" y="0.0" width="568" height="324"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GQS-f3-cdi">
-                                <rect key="frame" x="189" y="300" width="191" height="29"/>
+                                <rect key="frame" x="189" y="156" width="191" height="29"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="How to use Yippy" id="tsE-FG-dCI">
                                     <font key="font" metaFont="system" size="25"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1261,27 +1261,25 @@ Website: https://yippy.mattdavo.com</string>
                                 <accessibility identifier="howToUseLabel"/>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="m4h-rn-US5">
-                                <rect key="frame" x="18" y="20" width="532" height="272"/>
+                                <rect key="frame" x="18" y="20" width="532" height="128"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="528" id="Xw5-Hm-4Os"/>
                                 </constraints>
                                 <textFieldCell key="cell" alignment="center" id="wE9-ee-EOr">
                                     <font key="font" metaFont="system"/>
-                                    <string key="title">Yippy is a simple tool for clipboard/pasteboard history. Yippy is best used by taking advantage of its keyboard controls.
+                                    <string key="title">Yippy keeps a history of everything you copy.
 
-To launch the Yippy clipboard history window simply use the keyboard shortcut: Command (⌘) + Shift + v.
+Open it with ⌘⇧V. Arrow keys or mouse to navigate, return or double-click to paste, space to preview, right-click for more actions.
 
-The Yippy history window shows all the text items ever copied since Yippy has been running (in the background). The highlighted cell indicates that the item is selected and when return/enter is pressed, it will be saved as the current item to the clipboard and pasted into the current location of the cursor. Change the selected item either by clicking on another with the mouse or moving up and down with the arrow keys.
+Just start typing to search. Escape clears the search, or closes the window.
 
-To preview items in full, toggle the space bar and a large preview window will appear of the current selected item.
-
-The default position for the Yippy is to float on the right edge of the screen, however this can be customized in the menu bar by clicking on the Yippy icon in the status bar.</string>
+Click the Yippy icon in the menu bar to change its position or settings.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aFd-VN-Thk">
-                                <rect key="frame" x="229" y="337" width="111" height="111"/>
+                                <rect key="frame" x="229" y="193" width="111" height="111"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="111" id="u1Y-nk-C8u"/>
                                     <constraint firstAttribute="height" constant="111" id="z66-Ks-bh4"/>
@@ -1449,21 +1447,21 @@ The default position for the Yippy is to float on the right edge of the screen, 
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TWN-WL-Sbc">
-                                <rect key="frame" x="230" y="224" width="179" height="18"/>
+                                <rect key="frame" x="232" y="225" width="177" height="16"/>
                                 <buttonCell key="cell" type="check" title="Shows rich text" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="w28-Pw-Fov">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="du7-gj-uyC">
-                                <rect key="frame" x="230" y="196" width="180" height="18"/>
+                                <rect key="frame" x="232" y="197" width="178" height="16"/>
                                 <buttonCell key="cell" type="check" title="Pastes rich text" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Jm5-cb-S0n">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hp5-Bs-j3i">
-                                <rect key="frame" x="229" y="255" width="119" height="25"/>
+                                <rect key="frame" x="232" y="255" width="112" height="24"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fxc-JU-bFw" id="I0k-qn-2Wt">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>

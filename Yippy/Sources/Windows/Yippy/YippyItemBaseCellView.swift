@@ -134,9 +134,76 @@ class YippyItemBaseCellView: NSTableCellView {
         updateShortcutTextViewContraints()
     }
     
+    private func enclosingYippyTableView() -> YippyTableView? {
+        var v: NSView? = self.superview
+        while v != nil {
+            if let t = v as? YippyTableView { return t }
+            v = v?.superview
+        }
+        return nil
+    }
+
     override func rightMouseDown(with event: NSEvent) {
-        let menu = NSMenu(title: "Test").with(menuItem: NSMenuItem(title: "Options coming soon", action: nil, keyEquivalent: ""))
-        
-        menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
+        guard let tableView = enclosingYippyTableView() else { return }
+        let row = tableView.row(for: self)
+        guard row >= 0, row < tableView.yippyItems.count else { return }
+
+        tableView.selectItem(row)
+        tableView.yippyDelegate?.yippyTableView(tableView, selectedDidChange: row)
+
+        let item = tableView.yippyItems[row]
+
+        let menu = NSMenu(title: "")
+
+        let pasteItem = NSMenuItem(title: "Paste", action: #selector(menuPaste(_:)), keyEquivalent: "")
+        pasteItem.target = self
+        pasteItem.representedObject = row
+        menu.addItem(pasteItem)
+
+        let copyItem = NSMenuItem(title: "Copy", action: #selector(menuCopy(_:)), keyEquivalent: "")
+        copyItem.target = self
+        copyItem.representedObject = row
+        menu.addItem(copyItem)
+
+        if item.getFileUrl() != nil {
+            menu.addItem(.separator())
+            let revealItem = NSMenuItem(title: "Reveal in Finder", action: #selector(menuReveal(_:)), keyEquivalent: "")
+            revealItem.target = self
+            revealItem.representedObject = row
+            menu.addItem(revealItem)
+        }
+
+        menu.addItem(.separator())
+        let deleteItem = NSMenuItem(title: "Delete", action: #selector(menuDelete(_:)), keyEquivalent: "")
+        deleteItem.target = self
+        deleteItem.representedObject = row
+        menu.addItem(deleteItem)
+
+        menu.popUp(positioning: nil, at: convert(event.locationInWindow, from: nil), in: self)
+    }
+
+    @objc private func menuPaste(_ sender: NSMenuItem) {
+        guard let tableView = enclosingYippyTableView(), let row = sender.representedObject as? Int else { return }
+        tableView.yippyDelegate?.yippyTableView(tableView, pasteItemAt: row)
+    }
+
+    @objc private func menuCopy(_ sender: NSMenuItem) {
+        guard let tableView = enclosingYippyTableView(), let row = sender.representedObject as? Int,
+              row < tableView.yippyItems.count else { return }
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.writeObjects([tableView.yippyItems[row]])
+    }
+
+    @objc private func menuReveal(_ sender: NSMenuItem) {
+        guard let tableView = enclosingYippyTableView(), let row = sender.representedObject as? Int,
+              row < tableView.yippyItems.count,
+              let url = tableView.yippyItems[row].getFileUrl() else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+
+    @objc private func menuDelete(_ sender: NSMenuItem) {
+        guard let tableView = enclosingYippyTableView(), let row = sender.representedObject as? Int else { return }
+        tableView.yippyDelegate?.yippyTableView(tableView, deleteItemAt: row)
     }
 }

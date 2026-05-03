@@ -146,7 +146,32 @@ class HistoryItem: NSObject {
     
     func getPlainString() -> String? {
         guard let data = data(forType: .string) else { return nil }
-        return String(data: data, encoding: .utf8)
+        if let s = String(data: data, encoding: .utf8) { return s }
+        if let s = String(data: data, encoding: .utf16) { return s }
+        return String(data: data, encoding: .ascii)
+    }
+
+    /// Gets plain text from the item, converting rich text to plain text if necessary.
+    func getPlainTextString() -> String? {
+        if let plainStr = getPlainString() {
+            return plainStr
+        }
+        if let rtfStr = getRtfAttributedString() {
+            return rtfStr.string
+        }
+        for type in HistoryItem.rtfdPasteboardTypes {
+            if let d = data(forType: type),
+               let attr = NSAttributedString(rtfd: d, documentAttributes: nil) {
+                return attr.string
+            }
+        }
+        if let htmlAttr = getHtmlAttributedString() {
+            return htmlAttr.string
+        }
+        if let htmlStr = getHtmlRawString() {
+            return htmlStr.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+        }
+        return nil
     }
     
     func getRtfAttributedString() -> NSAttributedString? {
@@ -223,10 +248,18 @@ class HistoryItem: NSObject {
         return false
     }
     
+    static let rtfdPasteboardTypes: [NSPasteboard.PasteboardType] = [
+        NSPasteboard.PasteboardType("public.rtfd"),
+        NSPasteboard.PasteboardType("com.apple.flat-rtfd"),
+    ]
+
     private let richTextPasteboardTypes = [
         NSPasteboard.PasteboardType.rtf.rawValue,
         NSPasteboard.PasteboardType.html.rawValue,
-        "public.utf16-external-plain-text",
+        "public.rtfd",
+        "com.apple.flat-rtfd",
+        "com.apple.webarchive",
+        "Apple HTML pasteboard type",
         "org.chromium.web-custom-data",
     ]
 }
@@ -234,19 +267,49 @@ class HistoryItem: NSObject {
 // MARK: - HistoryItem+NSPasteboardWriting
 extension HistoryItem: NSPasteboardWriting {
     func writableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
-        return types.filter{
-            HistoryItem.pastesRichText || !richTextPasteboardTypes.contains($0.rawValue)
-        } + [Self.historyItemIdType]
+        if HistoryItem.pastesRichText {
+            return types + [Self.historyItemIdType]
+        } else {
+            // When pastesRichText is false, advertise only non-rich types
+            var resultTypes = types.filter { !richTextPasteboardTypes.contains($0.rawValue) }
+            // Ensure .string type is available for plain text conversion when possible
+            if !resultTypes.contains(.string) && getPlainTextString() != nil {
+                resultTypes.append(.string)
+            }
+            return resultTypes + [Self.historyItemIdType]
+        }
     }
     
     func pasteboardPropertyList(forType type: NSPasteboard.PasteboardType) -> Any? {
         if type == Self.historyItemIdType {
             return fsId.uuidString
         }
+        
+        // When pastesRichText is false, don't provide data for rich text types
+        if !HistoryItem.pastesRichText && richTextPasteboardTypes.contains(type.rawValue) {
+            return nil
+        }
+        
+        // Special handling for string type when rich text is disabled
+        if type == .string && !HistoryItem.pastesRichText {
+            // Try to get plain text, converting from rich text if necessary
+            if let plainText = getPlainTextString() {
+                return plainText.data(using: .utf8)
+            }
+            return nil
+        }
+        
         return data(forType: type)
     }
     
     func writingOptions(forType type: NSPasteboard.PasteboardType, pasteboard: NSPasteboard) -> NSPasteboard.WritingOptions {
+        // If rich text pasting is disabled, write the data immediately (no .promised)
+        // so the pasteboard contains the actual plain text payload and receivers
+        // will prefer the plain text type.
+        if !HistoryItem.pastesRichText {
+            return []
+        }
+
         return .promised
     }
 }

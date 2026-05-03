@@ -111,6 +111,13 @@ class YippyTableView: NSTableView {
         self.isRichText = isRichText
         reloadData()
     }
+
+    override func viewDidChangeEffectiveAppearance() {
+        super.viewDidChangeEffectiveAppearance()
+        cellHeightsCache.clearCache()
+        noteHeightOfRows(withIndexesChanged: IndexSet(integersIn: 0..<yippyItems.count))
+        redisplayVisible(yippyItems: yippyItems)
+    }
 }
 
 extension YippyTableView: NSTableViewDataSource {
@@ -194,7 +201,7 @@ extension YippyTableView: NSTableViewDataSource {
         
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            self.reloadData(forRowIndexes: IndexSet(integersIn: 0..<10), columnIndexes: IndexSet(arrayLiteral: 0))
+            self.reloadData(forRowIndexes: IndexSet(integersIn: 0..<self.yippyItems.count), columnIndexes: IndexSet(arrayLiteral: 0))
             if let delegate = self.yippyDelegate {
                 delegate.yippyTableView(self, didMoveItem: originalIndex, to: newIndex)
             }

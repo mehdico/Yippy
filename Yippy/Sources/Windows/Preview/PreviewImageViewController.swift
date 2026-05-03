@@ -42,12 +42,14 @@ class PreviewImageViewController: NSViewController, PreviewViewController {
     }
     
     func calculateWindowFrame(forImage image: NSImage) -> NSRect {
-        let maxWindowWidth = NSScreen.main!.frame.width * 0.8
-        let maxWindowHeight = NSScreen.main!.frame.height * 0.8
-        
+        let screenFrame = (view.window?.screen ?? NSScreen.main ?? NSScreen.screens.first)?.frame
+            ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
+        let maxWindowWidth = screenFrame.width * 0.8
+        let maxWindowHeight = screenFrame.height * 0.8
+
         var windowWidth: CGFloat = 0
         var windowHeight: CGFloat = 0
-        
+
         if image.size.width > image.size.height {
             windowWidth = min(maxWindowWidth, image.size.width)
             windowHeight = windowWidth * image.size.height/image.size.width
@@ -56,9 +58,9 @@ class PreviewImageViewController: NSViewController, PreviewViewController {
             windowHeight = min(maxWindowHeight, image.size.height)
             windowWidth = windowHeight * image.size.width/image.size.height
         }
-        
-        let center = NSPoint(x: NSScreen.main!.frame.midX - windowWidth / 2, y: NSScreen.main!.frame.midY - windowHeight / 2)
-        
+
+        let center = NSPoint(x: screenFrame.midX - windowWidth / 2, y: screenFrame.midY - windowHeight / 2)
+
         return NSRect(origin: center, size: NSSize(width: windowWidth, height: windowHeight))
     }
 }

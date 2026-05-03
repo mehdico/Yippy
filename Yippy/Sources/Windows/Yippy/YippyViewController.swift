@@ -42,7 +42,13 @@ class YippyViewController: NSViewController, NSWindowDelegate {
     let selected = BehaviorRelay<Int?>(value: nil)
     
     var globalMonitor: Any?
-    
+    var localKeyMonitor: Any?
+
+    private var emptyStateLabel: NSTextField?
+
+    private var lastClosedAt: Date?
+    private let searchClearAfter: TimeInterval = 60
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,7 +85,7 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         YippyHotKeys.upArrow.onLong(goToPreviousItem)
         YippyHotKeys.pageUp.onDown(goToPreviousItem)
         YippyHotKeys.pageUp.onLong(goToPreviousItem)
-        YippyHotKeys.escape.onDown(close)
+        YippyHotKeys.escape.onDown(handleEscape)
         YippyHotKeys.return.onDown(pasteSelected)
         YippyHotKeys.ctrlAltCmdLeftArrow.onDown { State.main.panelPosition.accept(.left) }
         YippyHotKeys.ctrlAltCmdRightArrow.onDown { State.main.panelPosition.accept(.right) }
@@ -125,14 +131,27 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         bindHotKeyToYippyWindow(YippyHotKeys.ctrlSpace, disposeBag: disposeBag)
         
         searchBar.resignFirstResponder()
+
+        setupEmptyStateLabel()
+        updateEmptyStateVisibility()
     }
-    
+
     override func viewWillAppear() {
         super.viewWillAppear()
-        
+
+        if let lastClosed = lastClosedAt,
+           Date().timeIntervalSince(lastClosed) > searchClearAfter,
+           !searchBar.stringValue.isEmpty {
+            searchBar.stringValue = ""
+            runSearch()
+        }
+
         isPreviewShowing = false
         resetSelected()
-        
+        updateEmptyStateVisibility()
+
+        view.window?.makeFirstResponder(yippyHistoryView)
+
         // Add global mouse down monitor
         globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
             guard let self = self, let window = self.view.window else { return }
@@ -141,15 +160,90 @@ class YippyViewController: NSViewController, NSWindowDelegate {
                 self.close()
             }
         }
+
+        // Type-to-search: forward printable characters to the search field when
+        // the user starts typing without explicitly focusing it.
+        localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self = self else { return event }
+            return self.handleLocalKeyDown(event) ? nil : event
+        }
     }
-    
+
     override func viewWillDisappear() {
         super.viewWillDisappear()
-        
+
+        lastClosedAt = Date()
+
         // Remove the global monitor
         if let monitor = globalMonitor {
             NSEvent.removeMonitor(monitor)
             globalMonitor = nil
+        }
+        if let monitor = localKeyMonitor {
+            NSEvent.removeMonitor(monitor)
+            localKeyMonitor = nil
+        }
+    }
+
+    private func handleLocalKeyDown(_ event: NSEvent) -> Bool {
+        // Ignore if search field is already first responder — let it handle the event.
+        if let firstResponder = view.window?.firstResponder,
+           firstResponder === searchBar || firstResponder === searchBar.currentEditor() {
+            return false
+        }
+
+        // Skip if any non-shift modifier is held — those are commands, not text.
+        let disallowed: NSEvent.ModifierFlags = [.command, .control, .option, .function]
+        if event.modifierFlags.intersection(disallowed).isEmpty == false {
+            return false
+        }
+
+        guard let chars = event.charactersIgnoringModifiers, !chars.isEmpty else { return false }
+
+        // Only forward printable, non-control characters.
+        let scalar = chars.unicodeScalars.first!
+        if scalar.value < 0x20 || scalar.value == 0x7F { return false }
+
+        searchBar.stringValue.append(chars)
+        focusSearchBar()
+        // Place cursor at end of the search field.
+        if let editor = searchBar.currentEditor() {
+            editor.selectedRange = NSRange(location: searchBar.stringValue.count, length: 0)
+        }
+        runSearch()
+        return true
+    }
+
+    private func setupEmptyStateLabel() {
+        let label = NSTextField(labelWithString: "Copy something to get started")
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.alignment = .center
+        label.textColor = .secondaryLabelColor
+        label.font = .systemFont(ofSize: 13)
+        label.isHidden = true
+        if let scrollView = yippyHistoryView.enclosingScrollView {
+            scrollView.addSubview(label)
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+                label.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
+            ])
+        } else {
+            view.addSubview(label)
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+        }
+        emptyStateLabel = label
+    }
+
+    private func updateEmptyStateVisibility() {
+        let isEmpty = yippyHistory.items.isEmpty
+        emptyStateLabel?.isHidden = !isEmpty
+        if isEmpty {
+            emptyStateLabel?.stringValue = searchBar.stringValue.isEmpty
+                ? "Copy something to get started"
+                : "No matches"
         }
     }
     
@@ -181,7 +275,9 @@ class YippyViewController: NSViewController, NSWindowDelegate {
     }
     
     func updateSearchEngine(items: [HistoryItem]) {
-        self.searchEngine = SearchEngine(data: items.compactMap({$0.getPlainString()}))
+        // Use map (not compactMap) so indices align with items. getPlainTextString
+        // surfaces text from RTF/HTML/RTFD items too, so they're searchable.
+        self.searchEngine = SearchEngine(data: items.map { $0.getPlainTextString() ?? "" })
     }
     
     func onAllChange(_ results: Results, _ selected: (Int?, Int?)) {
@@ -195,6 +291,7 @@ class YippyViewController: NSViewController, NSWindowDelegate {
                 
                 self.yippyHistory = YippyHistory(history: State.main.history, items: results.items)
                 self.yippyHistoryView.reloadData(self.yippyHistory.items, isRichText: self.isRichText)
+                self.updateEmptyStateVisibility()
             }
         
         if let previous = selected.0 {
@@ -253,6 +350,16 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         State.main.isHistoryPanelShown.accept(false)
         State.main.previewHistoryItem.accept(nil)
         resetSelected()
+    }
+
+    func handleEscape() {
+        if !searchBar.stringValue.isEmpty {
+            searchBar.stringValue = ""
+            runSearch()
+            view.window?.makeFirstResponder(yippyHistoryView)
+        } else {
+            close()
+        }
     }
     
     func shortcutPressed(key: Int) {
@@ -332,9 +439,19 @@ extension YippyViewController: YippyTableViewDelegate {
     func yippyTableView(_ yippyTableView: YippyTableView, selectedDidChange selected: Int?) {
         self.selected.accept(selected)
     }
-    
+
     func yippyTableView(_ yippyTableView: YippyTableView, didMoveItem from: Int, to: Int) {
         yippyHistory.move(from: from, to: to)
         selected.accept(to)
+    }
+
+    func yippyTableView(_ yippyTableView: YippyTableView, pasteItemAt row: Int) {
+        guard row >= 0, row < yippyHistory.items.count else { return }
+        paste(selected: row)
+    }
+
+    func yippyTableView(_ yippyTableView: YippyTableView, deleteItemAt row: Int) {
+        guard row >= 0, row < yippyHistory.items.count else { return }
+        self.selected.accept(yippyHistory.delete(selected: row))
     }
 }

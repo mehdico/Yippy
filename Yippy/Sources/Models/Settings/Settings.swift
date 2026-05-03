@@ -48,7 +48,7 @@ struct Settings: Codable, DefaultStorable {
     // MARK: - Default
     
     static let `default` = Settings(
-        panelPosition: .right,
+        panelPosition: .bottom,
         pasteboardChangeCount: -1,
         toggleHotKey: KeyCombo(key: .v, modifiers: [.command, .shift]),
         maxHistory: Constants.settings.maxHistoryItemsDefault,
