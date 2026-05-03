@@ -42,3 +42,12 @@ target 'Yippy' do
         pod 'RxCocoa', '~> 6.8.0'
     end
 end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+            config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '13.0'
+        end
+    end
+end
