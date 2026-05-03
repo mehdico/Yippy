@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 100;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -321,30 +321,24 @@
 /* Begin PBXFrameworksBuildPhase section */
 		34ACFBB822EB0B0F004E6E63 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				344C1162234DD2EF00B35DC9 /* Quartz.framework in Frameworks */,
 				34545E50267715D600D6404D /* HotKey in Frameworks */,
 				34EC0FF42504A599004E1A63 /* Fuse in Frameworks */,
 				2213FEFD4D76FFF2085F39F4 /* Pods_Yippy.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBCA22EB0B11004E6E63 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				D104B1D4E210055A8E6424F0 /* Pods_YippyTests.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBD522EB0B11004E6E63 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				B8A057305B33D2028FC0EC05 /* Pods_YippyUITests.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -794,8 +788,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = Yippy;
 			packageProductDependencies = (
 				34EC0FF32504A599004E1A63 /* Fuse */,
@@ -876,7 +868,6 @@
 				};
 			};
 			buildConfigurationList = 34ACFBB622EB0B0E004E6E63 /* Build configuration list for PBXProject "Yippy" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -888,6 +879,7 @@
 				345DCFBB2420C2D2003E214D /* XCRemoteSwiftPackageReference "HotKey" */,
 				34EC0FF22504A599004E1A63 /* XCRemoteSwiftPackageReference "fuse-swift" */,
 			);
+			preferredProjectObjectVersion = 100;
 			productRefGroup = 34ACFBBC22EB0B0F004E6E63 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -902,58 +894,51 @@
 /* Begin PBXResourcesBuildPhase section */
 		34ACFBB922EB0B0F004E6E63 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				348D526523876B1E0024A5C7 /* README.md in Resources */,
 				34ACFBC622EB0B11004E6E63 /* Main.storyboard in Resources */,
 				344C1160234DB23B00B35DC9 /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBCB22EB0B11004E6E63 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBD622EB0B11004E6E63 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		2A60A7B814DF5E6C64690AA7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-YippyUITests-checkManifestLockResult.txt",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = (
+				"diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null",
+				"if [ $? != 0 ] ; then",
+				"    # print error to STDERR",
+				"    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2",
+				"    exit 1",
+				"fi",
+				"# This output is used by Xcode 'outputs' to avoid re-running this script phase.",
+				"echo \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 		4A0057EE70700FCD977DF106 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YippyTests/Pods-YippyTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
@@ -961,16 +946,15 @@
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YippyTests/Pods-YippyTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YippyTests/Pods-YippyTests-frameworks.sh\"\n";
+			shellScript = (
+				"\"${PODS_ROOT}/Target Support Files/Pods-YippyTests/Pods-YippyTests-frameworks.sh\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 		651949D2B65A134E8F9E664E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YippyUITests/Pods-YippyUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
@@ -978,60 +962,63 @@
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YippyUITests/Pods-YippyUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YippyUITests/Pods-YippyUITests-frameworks.sh\"\n";
+			shellScript = (
+				"\"${PODS_ROOT}/Target Support Files/Pods-YippyUITests/Pods-YippyUITests-frameworks.sh\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 		750D5CFCA0BAE22103480DDB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Yippy-checkManifestLockResult.txt",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = (
+				"diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null",
+				"if [ $? != 0 ] ; then",
+				"    # print error to STDERR",
+				"    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2",
+				"    exit 1",
+				"fi",
+				"# This output is used by Xcode 'outputs' to avoid re-running this script phase.",
+				"echo \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 		7DDB83DEAFAC1A134A439734 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-YippyTests-checkManifestLockResult.txt",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = (
+				"diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null",
+				"if [ $? != 0 ] ; then",
+				"    # print error to STDERR",
+				"    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2",
+				"    exit 1",
+				"fi",
+				"# This output is used by Xcode 'outputs' to avoid re-running this script phase.",
+				"echo \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 		D04500AD22B2AEF42A36F940 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Yippy/Pods-Yippy-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
@@ -1039,9 +1026,11 @@
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Yippy/Pods-Yippy-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Yippy/Pods-Yippy-frameworks.sh\"\n";
+			shellScript = (
+				"\"${PODS_ROOT}/Target Support Files/Pods-Yippy/Pods-Yippy-frameworks.sh\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1049,7 +1038,6 @@
 /* Begin PBXSourcesBuildPhase section */
 		34ACFBB722EB0B0F004E6E63 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				34010D2A234AB3F100C1218D /* YippyWindow.swift in Sources */,
 				341D9D292337251B008A2BE6 /* KeyActionHandler.swift in Sources */,
@@ -1146,11 +1134,9 @@
 				34B5C42C23580CC6005247EB /* WarningLogger.swift in Sources */,
 				3488B14022FAE8F30019E7DA /* Constants.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBC922EB0B11004E6E63 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				34268115233DA69500BA226A /* ArrayFunctionalTests.swift in Sources */,
 				3426810D233D912E00BA226A /* PasteboardMonitorTests.swift in Sources */,
@@ -1171,11 +1157,9 @@
 				34CA0202235D742000EB067C /* HistoryFileManagerMock.swift in Sources */,
 				343C0BF1235C57F600129D23 /* ArrayFileManagerMock.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34ACFBD422EB0B11004E6E63 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				348D526723878E160024A5C7 /* PanelPosition.swift in Sources */,
 				34F1047E23542D1600B65251 /* PasteboardType+Codable.swift in Sources */,
@@ -1194,7 +1178,6 @@
 				345B149A23404A9400C2D0DA /* XCUIApplication+Actions.swift in Sources */,
 				34ACFBDD22EB0B11004E6E63 /* YippyUITests.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -1226,7 +1209,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		34ACFBDF22EB0B11004E6E63 /* Debug */ = {
+		34ACFBDF22EB0B11004E6E63 /* Debug configuration for PBXProject "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1292,7 +1275,7 @@
 			};
 			name = Debug;
 		};
-		34ACFBE022EB0B11004E6E63 /* Release */ = {
+		34ACFBE022EB0B11004E6E63 /* Release configuration for PBXProject "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1351,7 +1334,7 @@
 			};
 			name = Release;
 		};
-		34ACFBE222EB0B11004E6E63 /* Debug */ = {
+		34ACFBE222EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 202453EF7CD6236AEDFC2D28 /* Pods-Yippy.debug.xcconfig */;
 			buildSettings = {
@@ -1371,7 +1354,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Mehdico.Yippy;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1380,7 +1363,7 @@
 			};
 			name = Debug;
 		};
-		34ACFBE322EB0B11004E6E63 /* Release */ = {
+		34ACFBE322EB0B11004E6E63 /* Release configuration for PBXNativeTarget "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E64E0EE8F7B5AE23FF150E45 /* Pods-Yippy.release.xcconfig */;
 			buildSettings = {
@@ -1400,7 +1383,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Mehdico.Yippy;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1409,7 +1392,7 @@
 			};
 			name = Release;
 		};
-		34ACFBE522EB0B11004E6E63 /* Debug */ = {
+		34ACFBE522EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "YippyTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 497AE5F620140FB1A3632D80 /* Pods-YippyTests.debug.xcconfig */;
 			buildSettings = {
@@ -1432,7 +1415,7 @@
 			};
 			name = Debug;
 		};
-		34ACFBE622EB0B11004E6E63 /* Release */ = {
+		34ACFBE622EB0B11004E6E63 /* Release configuration for PBXNativeTarget "YippyTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D494A85C58610499F7B77533 /* Pods-YippyTests.release.xcconfig */;
 			buildSettings = {
@@ -1455,7 +1438,7 @@
 			};
 			name = Release;
 		};
-		34ACFBE822EB0B11004E6E63 /* Debug */ = {
+		34ACFBE822EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 04546907DC383E069F30ADBE /* Pods-YippyUITests.debug.xcconfig */;
 			buildSettings = {
@@ -1477,7 +1460,7 @@
 			};
 			name = Debug;
 		};
-		34ACFBE922EB0B11004E6E63 /* Release */ = {
+		34ACFBE922EB0B11004E6E63 /* Release configuration for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FEE6024221D8C9C221BBE212 /* Pods-YippyUITests.release.xcconfig */;
 			buildSettings = {
@@ -1499,7 +1482,7 @@
 			};
 			name = Release;
 		};
-		34F1047F2354323100B65251 /* Beta Debug */ = {
+		34F1047F2354323100B65251 /* Beta Debug configuration for PBXProject "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1565,7 +1548,7 @@
 			};
 			name = "Beta Debug";
 		};
-		34F104802354323100B65251 /* Beta Debug */ = {
+		34F104802354323100B65251 /* Beta Debug configuration for PBXNativeTarget "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6345AD4696DA11C3A58F38CB /* Pods-Yippy.beta debug.xcconfig */;
 			buildSettings = {
@@ -1585,7 +1568,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = MatthewDavidson.YippyBeta;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME) Beta";
@@ -1595,7 +1578,7 @@
 			};
 			name = "Beta Debug";
 		};
-		34F104812354323100B65251 /* Beta Debug */ = {
+		34F104812354323100B65251 /* Beta Debug configuration for PBXNativeTarget "YippyTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 473D1B2417E6C47B92751AA6 /* Pods-YippyTests.beta debug.xcconfig */;
 			buildSettings = {
@@ -1618,7 +1601,7 @@
 			};
 			name = "Beta Debug";
 		};
-		34F104822354323100B65251 /* Beta Debug */ = {
+		34F104822354323100B65251 /* Beta Debug configuration for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C555279B4167FBDCA36E01CC /* Pods-YippyUITests.beta debug.xcconfig */;
 			buildSettings = {
@@ -1640,7 +1623,7 @@
 			};
 			name = "Beta Debug";
 		};
-		34F104832354325400B65251 /* Beta Release */ = {
+		34F104832354325400B65251 /* Beta Release configuration for PBXProject "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1699,7 +1682,7 @@
 			};
 			name = "Beta Release";
 		};
-		34F104842354325400B65251 /* Beta Release */ = {
+		34F104842354325400B65251 /* Beta Release configuration for PBXNativeTarget "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D2B3E00E7AF930AA001E27C /* Pods-Yippy.beta release.xcconfig */;
 			buildSettings = {
@@ -1719,7 +1702,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = MatthewDavidson.YippyBeta;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME) Beta";
@@ -1729,7 +1712,7 @@
 			};
 			name = "Beta Release";
 		};
-		34F104852354325400B65251 /* Beta Release */ = {
+		34F104852354325400B65251 /* Beta Release configuration for PBXNativeTarget "YippyTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DD6B8A620296CD50E196DD19 /* Pods-YippyTests.beta release.xcconfig */;
 			buildSettings = {
@@ -1752,7 +1735,7 @@
 			};
 			name = "Beta Release";
 		};
-		34F104862354325400B65251 /* Beta Release */ = {
+		34F104862354325400B65251 /* Beta Release configuration for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D645D0527FE8FF6EF353F28D /* Pods-YippyUITests.beta release.xcconfig */;
 			buildSettings = {
@@ -1774,7 +1757,7 @@
 			};
 			name = "Beta Release";
 		};
-		34F104872354325E00B65251 /* XCTest */ = {
+		34F104872354325E00B65251 /* XCTest configuration for PBXProject "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1840,7 +1823,7 @@
 			};
 			name = XCTest;
 		};
-		34F104882354325E00B65251 /* XCTest */ = {
+		34F104882354325E00B65251 /* XCTest configuration for PBXNativeTarget "Yippy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 292479A169E6616BA796405B /* Pods-Yippy.xctest.xcconfig */;
 			buildSettings = {
@@ -1860,7 +1843,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = MatthewDavidson.YippyXCTest;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1869,7 +1852,7 @@
 			};
 			name = XCTest;
 		};
-		34F104892354325E00B65251 /* XCTest */ = {
+		34F104892354325E00B65251 /* XCTest configuration for PBXNativeTarget "YippyTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB08CF772E2DDB5EB572EC69 /* Pods-YippyTests.xctest.xcconfig */;
 			buildSettings = {
@@ -1893,7 +1876,7 @@
 			};
 			name = XCTest;
 		};
-		34F1048A2354325E00B65251 /* XCTest */ = {
+		34F1048A2354325E00B65251 /* XCTest configuration for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B7B2145CEF513C8B71E739A5 /* Pods-YippyUITests.xctest.xcconfig */;
 			buildSettings = {
@@ -1921,49 +1904,45 @@
 		34ACFBB622EB0B0E004E6E63 /* Build configuration list for PBXProject "Yippy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				34ACFBDF22EB0B11004E6E63 /* Debug */,
-				34F104872354325E00B65251 /* XCTest */,
-				34F1047F2354323100B65251 /* Beta Debug */,
-				34ACFBE022EB0B11004E6E63 /* Release */,
-				34F104832354325400B65251 /* Beta Release */,
+				34ACFBDF22EB0B11004E6E63 /* Debug configuration for PBXProject "Yippy" */,
+				34F104872354325E00B65251 /* XCTest configuration for PBXProject "Yippy" */,
+				34F1047F2354323100B65251 /* Beta Debug configuration for PBXProject "Yippy" */,
+				34ACFBE022EB0B11004E6E63 /* Release configuration for PBXProject "Yippy" */,
+				34F104832354325400B65251 /* Beta Release configuration for PBXProject "Yippy" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		34ACFBE122EB0B11004E6E63 /* Build configuration list for PBXNativeTarget "Yippy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				34ACFBE222EB0B11004E6E63 /* Debug */,
-				34F104882354325E00B65251 /* XCTest */,
-				34F104802354323100B65251 /* Beta Debug */,
-				34ACFBE322EB0B11004E6E63 /* Release */,
-				34F104842354325400B65251 /* Beta Release */,
+				34ACFBE222EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "Yippy" */,
+				34F104882354325E00B65251 /* XCTest configuration for PBXNativeTarget "Yippy" */,
+				34F104802354323100B65251 /* Beta Debug configuration for PBXNativeTarget "Yippy" */,
+				34ACFBE322EB0B11004E6E63 /* Release configuration for PBXNativeTarget "Yippy" */,
+				34F104842354325400B65251 /* Beta Release configuration for PBXNativeTarget "Yippy" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		34ACFBE422EB0B11004E6E63 /* Build configuration list for PBXNativeTarget "YippyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				34ACFBE522EB0B11004E6E63 /* Debug */,
-				34F104892354325E00B65251 /* XCTest */,
-				34F104812354323100B65251 /* Beta Debug */,
-				34ACFBE622EB0B11004E6E63 /* Release */,
-				34F104852354325400B65251 /* Beta Release */,
+				34ACFBE522EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "YippyTests" */,
+				34F104892354325E00B65251 /* XCTest configuration for PBXNativeTarget "YippyTests" */,
+				34F104812354323100B65251 /* Beta Debug configuration for PBXNativeTarget "YippyTests" */,
+				34ACFBE622EB0B11004E6E63 /* Release configuration for PBXNativeTarget "YippyTests" */,
+				34F104852354325400B65251 /* Beta Release configuration for PBXNativeTarget "YippyTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		34ACFBE722EB0B11004E6E63 /* Build configuration list for PBXNativeTarget "YippyUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				34ACFBE822EB0B11004E6E63 /* Debug */,
-				34F1048A2354325E00B65251 /* XCTest */,
-				34F104822354323100B65251 /* Beta Debug */,
-				34ACFBE922EB0B11004E6E63 /* Release */,
-				34F104862354325400B65251 /* Beta Release */,
+				34ACFBE822EB0B11004E6E63 /* Debug configuration for PBXNativeTarget "YippyUITests" */,
+				34F1048A2354325E00B65251 /* XCTest configuration for PBXNativeTarget "YippyUITests" */,
+				34F104822354323100B65251 /* Beta Debug configuration for PBXNativeTarget "YippyUITests" */,
+				34ACFBE922EB0B11004E6E63 /* Release configuration for PBXNativeTarget "YippyUITests" */,
+				34F104862354325400B65251 /* Beta Release configuration for PBXNativeTarget "YippyUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
