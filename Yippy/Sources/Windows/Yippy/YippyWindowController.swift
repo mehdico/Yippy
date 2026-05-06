@@ -50,9 +50,9 @@ class YippyWindowController: NSWindowController {
             })
     }
     
-    func subscribeFrameTo(position: Observable<PanelPosition>, screen: Observable<NSScreen>) -> Disposable {
-        Observable.combineLatest(position, screen).subscribe(onNext: {
-            (position, screen) in
+    func subscribeFrameTo(position: Observable<PanelPosition>, screen: Observable<NSScreen>, useHorizontalLayout: Observable<Bool>) -> Disposable {
+        Observable.combineLatest(position, screen, useHorizontalLayout).subscribe(onNext: {
+            (position, screen, _) in
             self.window?.setFrame(position.getFrame(forScreen: screen), display: true)
         })
     }

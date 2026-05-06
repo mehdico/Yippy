@@ -57,6 +57,7 @@ class YippyFileIconCellView: YippyItemBaseCellView, YippyItem {
         itemTextView.attributedText = formatFileUrl(historyItem.getFileUrl()!)
         itemTextView.constraint(withIdentifier: "height")?.constant = Self.getFileNameTextViewHeight(withCellWidth: floor(yippyTableView.cellWidth), forHistoryItem: historyItem)
         setHighlight(isSelected: yippyTableView.isRowSelected(i))
+        applySourceApp(forItem: historyItem)
     }
     
     static func getItemHeight(withYippyTableView yippyTableView: YippyTableView, forHistoryItem historyItem: HistoryItem) -> CGFloat {

@@ -184,7 +184,7 @@ extension History: PasteboardMonitorDelegate {
                     }
                 }
                 if !data.isEmpty {
-                    let historyItem = HistoryItem(unsavedData: data, cache: cache)
+                    let historyItem = HistoryItem(unsavedData: data, cache: cache, sourceBundleId: originBundleId)
                     insertItem(historyItem, at: 0)
                 }
             }

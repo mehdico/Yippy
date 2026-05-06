@@ -147,9 +147,11 @@ class HistoryFileManager {
                 do {
                     // Get all the files
                     let dataUrls = try self.fileManager.contentsOfDirectory(at: content, includingPropertiesForKeys: nil)
+                        .filter({ $0.lastPathComponent != "meta.json" })
                     // and create the types
                     let types = dataUrls.map({NSPasteboard.PasteboardType($0.lastPathComponent)})
-                    items[id] = HistoryItem(fsId: id, types: types, cache: cache)
+                    let sourceBundleId = self.readMeta(forItemWithId: id)
+                    items[id] = HistoryItem(fsId: id, types: types, cache: cache, sourceBundleId: sourceBundleId)
                 }
                 catch {
                     let historyError = YippyError(code: 0, userInfo: [
@@ -246,9 +248,12 @@ class HistoryFileManager {
                 }
             }
             
+            // Persist source-app metadata if we have it
+            self.writeMeta(forItem: newHistory[i])
+
             // Start caching now that the data is written
             newHistory[i].startCaching()
-            
+
             // Update order
             self.saveHistoryOrder(history: newHistory, completionHandler: handler)
         }
@@ -353,5 +358,33 @@ class HistoryFileManager {
     
     func getUrl(forItemWithId id: UUID, andPasteboardType type: NSPasteboard.PasteboardType) -> URL {
         return getUrl(forItemWithId: id).appendingPathComponent(type.rawValue, isDirectory: false)
+    }
+
+    private func getMetaUrl(forItemWithId id: UUID) -> URL {
+        return getUrl(forItemWithId: id).appendingPathComponent("meta.json", isDirectory: false)
+    }
+
+    private struct ItemMeta: Codable { let sourceBundleId: String? }
+
+    fileprivate func writeMeta(forItem item: HistoryItem) {
+        guard item.sourceBundleId != nil else { return }
+        let url = getMetaUrl(forItemWithId: item.fsId)
+        let meta = ItemMeta(sourceBundleId: item.sourceBundleId)
+        do {
+            let data = try JSONEncoder().encode(meta)
+            try data.write(to: url)
+        } catch {
+            YippyWarning(localizedDescription: "Failed to write meta.json for item \(item.fsId.uuidString): \(error.localizedDescription)").log(with: warningLogger)
+        }
+    }
+
+    fileprivate func readMeta(forItemWithId id: UUID) -> String? {
+        let url = getMetaUrl(forItemWithId: id)
+        guard fileManager.fileExists(atPath: url.path),
+              let data = try? Data(contentsOf: url),
+              let meta = try? JSONDecoder().decode(ItemMeta.self, from: data) else {
+            return nil
+        }
+        return meta.sourceBundleId
     }
 }

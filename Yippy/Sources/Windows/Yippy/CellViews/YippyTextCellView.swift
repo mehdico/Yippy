@@ -50,10 +50,11 @@ class YippyTextCellView: YippyItemBaseCellView, YippyItem {
     
     func setupCell(withYippyTableView yippyTableView: YippyTableView, forHistoryItem historyItem: HistoryItem, at i: Int) {
         itemTextView.attributedText = HistoryItemText.getAttributedString(forItem: historyItem, usingItemRtf: yippyTableView.isRichText)
-        
+
         setHighlight(isSelected: yippyTableView.isRowSelected(i))
-        
+
         setupShortcutTextView(at: i)
+        applySourceApp(forItem: historyItem)
     }
     
     static func getTextContainerWidth(cellWidth: CGFloat) -> CGFloat {

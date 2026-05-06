@@ -85,6 +85,8 @@
 		3474C14223472A1500232620 /* NSEdgeInset+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3474C14123472A1500232620 /* NSEdgeInset+Convenience.swift */; };
 		347D59A522F43B94005F6EA8 /* YippyTextCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347D59A322F43B94005F6EA8 /* YippyTextCellView.swift */; };
 		3486C0A6234416A4004B2F2E /* YippyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3486C0A5234416A4004B2F2E /* YippyTableView.swift */; };
+		AABBCCDD11111111CCCC0001 /* YippyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCCDD11111111CCCC0002 /* YippyCardView.swift */; };
+		AABBCCDD11111111CCCC0003 /* YippyCardCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCCDD11111111CCCC0004 /* YippyCardCollectionView.swift */; };
 		3488B14022FAE8F30019E7DA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3488B13F22FAE8F30019E7DA /* Constants.swift */; };
 		3488B14222FAE9FA0019E7DA /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3488B14122FAE9FA0019E7DA /* State.swift */; };
 		348D526523876B1E0024A5C7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 348D526423876B1E0024A5C7 /* README.md */; };
@@ -242,6 +244,8 @@
 		3474C14123472A1500232620 /* NSEdgeInset+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSEdgeInset+Convenience.swift"; sourceTree = "<group>"; };
 		347D59A322F43B94005F6EA8 /* YippyTextCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YippyTextCellView.swift; sourceTree = "<group>"; };
 		3486C0A5234416A4004B2F2E /* YippyTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YippyTableView.swift; sourceTree = "<group>"; };
+		AABBCCDD11111111CCCC0002 /* YippyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YippyCardView.swift; sourceTree = "<group>"; };
+		AABBCCDD11111111CCCC0004 /* YippyCardCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YippyCardCollectionView.swift; sourceTree = "<group>"; };
 		3488B13F22FAE8F30019E7DA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3488B14122FAE9FA0019E7DA /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		348D526423876B1E0024A5C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -393,6 +397,8 @@
 				345BAE3123500600008ACB4C /* YippyItemCellTextView.swift */,
 				34E516CE2352C4D4008B4256 /* YippyItemContentView.swift */,
 				3486C0A5234416A4004B2F2E /* YippyTableView.swift */,
+				AABBCCDD11111111CCCC0002 /* YippyCardView.swift */,
+				AABBCCDD11111111CCCC0004 /* YippyCardCollectionView.swift */,
 				340FB43C236550390053D82C /* YippyTableViewDelegate.swift */,
 				34ACFBEA22EB0D6A004E6E63 /* YippyViewController.swift */,
 				34A11C9723693CFD00DA1B14 /* HorizontalButtonsView.swift */,
@@ -1087,6 +1093,8 @@
 				34D018EF232B514A006259E1 /* AboutViewController.swift in Sources */,
 				34734C802330CB6A0056F855 /* PasteboardMonitor.swift in Sources */,
 				3486C0A6234416A4004B2F2E /* YippyTableView.swift in Sources */,
+				AABBCCDD11111111CCCC0001 /* YippyCardView.swift in Sources */,
+				AABBCCDD11111111CCCC0003 /* YippyCardCollectionView.swift in Sources */,
 				345131F82383B6EE002D9D03 /* PreviewQLViewController.swift in Sources */,
 				341D9D2D23372592008A2BE6 /* EventMonitor.swift in Sources */,
 				341D9D2B23372550008A2BE6 /* KeyAction.swift in Sources */,

@@ -163,7 +163,7 @@ class Controller {
             .subscribeTo(toggle: state.isHistoryPanelShown)
             .disposed(by: disposeBag)
         controller
-            .subscribeFrameTo(position: state.panelPosition.asObservable(), screen: state.currentScreen.asObservable())
+            .subscribeFrameTo(position: state.panelPosition.asObservable(), screen: state.currentScreen.asObservable(), useHorizontalLayout: state.useHorizontalLayout.asObservable())
             .disposed(by: disposeBag)
         return controller
     }

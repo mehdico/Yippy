@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         checkBuildFlags()
         checkLaunchArgs()
         Controller.main = Controller(state: State.main, settings: Settings.main)
-        
+
         showWelcomeIfNeeded()
 
         setupHotKey()

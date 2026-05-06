@@ -20,11 +20,15 @@ struct Results {
 class YippyViewController: NSViewController, NSWindowDelegate {
     
     @IBOutlet var yippyHistoryView: YippyTableView!
-    
+
     @IBOutlet var itemGroupScrollView: HorizontalButtonsView!
     @IBOutlet var itemCountLabel: NSTextField!
-    
+
     @IBOutlet var searchBar: NSTextField!
+
+    private var cardScrollView: NSScrollView!
+    private var cardCollectionView: YippyCardCollectionView!
+    private var useHorizontalLayout: Bool = State.main.useHorizontalLayout.value
     
     var yippyHistory = YippyHistory(history: State.main.history, items: [])
     
@@ -51,18 +55,20 @@ class YippyViewController: NSViewController, NSWindowDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         yippyHistoryView.yippyDelegate = self
-        
+        setupCardCollectionView()
+
         State.main.history.subscribe(onNext: onHistoryChange)
-        
+
         State.main.showsRichText.distinctUntilChanged().subscribe(onNext: onShowsRichText).disposed(by: disposeBag)
-        
+        State.main.useHorizontalLayout.distinctUntilChanged().subscribe(onNext: { [weak self] in self?.onUseHorizontalLayout($0) }).disposed(by: disposeBag)
+
         itemGroupScrollView.bind(toData: itemGroups.asObservable()).disposed(by: disposeBag)
         itemGroupScrollView.bind(toSelected: BehaviorRelay<Int>(value: 0).asObservable()).disposed(by: disposeBag)
         // TODO: Remove this when implemented
         itemGroupScrollView.constraint(withIdentifier: "height")?.constant = 0
-        
+
         Observable.combineLatest(
             results,
             selected.distinctUntilChanged().withPrevious(startWith: nil)
@@ -70,9 +76,9 @@ class YippyViewController: NSViewController, NSWindowDelegate {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: onAllChange)
             .disposed(by: disposeBag)
-        
+
         searchBar.delegate = self
-        
+
         // TODO: Fix hack to make onAllChange run initially
         selected.accept(1)
         resetSelected()
@@ -85,6 +91,10 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         YippyHotKeys.upArrow.onLong(goToPreviousItem)
         YippyHotKeys.pageUp.onDown(goToPreviousItem)
         YippyHotKeys.pageUp.onLong(goToPreviousItem)
+        YippyHotKeys.leftArrow.onDown(goToPreviousItemHorizontal)
+        YippyHotKeys.leftArrow.onLong(goToPreviousItemHorizontal)
+        YippyHotKeys.rightArrow.onDown(goToNextItemHorizontal)
+        YippyHotKeys.rightArrow.onLong(goToNextItemHorizontal)
         YippyHotKeys.escape.onDown(handleEscape)
         YippyHotKeys.return.onDown(pasteSelected)
         YippyHotKeys.ctrlAltCmdLeftArrow.onDown { State.main.panelPosition.accept(.left) }
@@ -109,6 +119,8 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         
         bindHotKeyToYippyWindow(YippyHotKeys.downArrow, disposeBag: disposeBag)
         bindHotKeyToYippyWindow(YippyHotKeys.upArrow, disposeBag: disposeBag)
+        bindHotKeyToYippyWindow(YippyHotKeys.leftArrow, disposeBag: disposeBag)
+        bindHotKeyToYippyWindow(YippyHotKeys.rightArrow, disposeBag: disposeBag)
         bindHotKeyToYippyWindow(YippyHotKeys.return, disposeBag: disposeBag)
         bindHotKeyToYippyWindow(YippyHotKeys.escape, disposeBag: disposeBag)
         bindHotKeyToYippyWindow(YippyHotKeys.pageDown, disposeBag: disposeBag)
@@ -138,6 +150,7 @@ class YippyViewController: NSViewController, NSWindowDelegate {
 
     override func viewWillAppear() {
         super.viewWillAppear()
+        attachCardViewIfNeeded()
 
         if let lastClosed = lastClosedAt,
            Date().timeIntervalSince(lastClosed) > searchClearAfter,
@@ -150,7 +163,7 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         resetSelected()
         updateEmptyStateVisibility()
 
-        view.window?.makeFirstResponder(yippyHistoryView)
+        view.window?.makeFirstResponder(useHorizontalLayout ? cardCollectionView : yippyHistoryView)
 
         // Add global mouse down monitor
         globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
@@ -221,19 +234,11 @@ class YippyViewController: NSViewController, NSWindowDelegate {
         label.textColor = .secondaryLabelColor
         label.font = .systemFont(ofSize: 13)
         label.isHidden = true
-        if let scrollView = yippyHistoryView.enclosingScrollView {
-            scrollView.addSubview(label)
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
-            ])
-        } else {
-            view.addSubview(label)
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-        }
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
         emptyStateLabel = label
     }
 
@@ -288,32 +293,127 @@ class YippyViewController: NSViewController, NSWindowDelegate {
                 else {
                     self.itemCountLabel.stringValue = "\(results.items.count) items"
                 }
-                
+
                 self.yippyHistory = YippyHistory(history: State.main.history, items: results.items)
-                self.yippyHistoryView.reloadData(self.yippyHistory.items, isRichText: self.isRichText)
+                reloadActiveView()
                 self.updateEmptyStateVisibility()
             }
-        
+
+        let useCards = useHorizontalLayout && didAttachCardView
+
         if let previous = selected.0 {
-            self.yippyHistoryView.deselectItem(previous)
-            self.yippyHistoryView.reloadItem(previous)
+            if useCards {
+                cardCollectionView.deselectItem(previous)
+                cardCollectionView.reloadItem(previous)
+            } else {
+                yippyHistoryView.deselectItem(previous)
+                yippyHistoryView.reloadItem(previous)
+            }
         }
         if let selected = selected.1 {
-            let currentSelection = self.yippyHistoryView.selected
-            if currentSelection == nil || currentSelection != selected {
-                self.yippyHistoryView.selectItem(selected)
+            if useCards {
+                if cardCollectionView.selected != selected {
+                    cardCollectionView.selectItem(selected)
+                }
+                cardCollectionView.reloadItem(selected)
+            } else {
+                let currentSelection = self.yippyHistoryView.selected
+                if currentSelection == nil || currentSelection != selected {
+                    self.yippyHistoryView.selectItem(selected)
+                }
+                self.yippyHistoryView.reloadItem(selected)
             }
-            self.yippyHistoryView.reloadItem(selected)
-            
+
             if self.isPreviewShowing {
                 State.main.previewHistoryItem.accept(self.yippyHistory.items[selected])
             }
         }
     }
-    
+
     func onShowsRichText(_ showsRichText: Bool) {
         isRichText = showsRichText
+        reloadActiveView()
+    }
+
+    private func reloadActiveView() {
         yippyHistoryView.reloadData(yippyHistory.items, isRichText: isRichText)
+        if didAttachCardView {
+            cardCollectionView.reloadData(yippyHistory.items, isRichText: isRichText)
+        }
+    }
+
+    private func setupCardCollectionView() {
+        cardCollectionView = YippyCardCollectionView()
+        cardCollectionView.yippyDelegate = self
+        cardCollectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        let scroll = NSScrollView()
+        scroll.hasHorizontalScroller = true
+        scroll.hasVerticalScroller = false
+        scroll.autohidesScrollers = true
+        scroll.drawsBackground = false
+        scroll.documentView = cardCollectionView
+        cardScrollView = scroll
+
+        let clip = scroll.contentView
+        NSLayoutConstraint.activate([
+            cardCollectionView.topAnchor.constraint(equalTo: clip.topAnchor),
+            cardCollectionView.bottomAnchor.constraint(equalTo: clip.bottomAnchor),
+            cardCollectionView.leadingAnchor.constraint(equalTo: clip.leadingAnchor),
+            cardCollectionView.heightAnchor.constraint(equalTo: clip.heightAnchor),
+        ])
+    }
+
+    private var didAttachCardView = false
+
+    private func attachCardViewIfNeeded() {
+        guard !didAttachCardView else { return }
+        guard let scroll = cardScrollView else { return }
+        guard let table = yippyHistoryView.enclosingScrollView, let parent = table.superview else { return }
+
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        parent.addSubview(scroll)
+
+        // Anchor horizontally + bottom to the table (so cards share its bounds), but
+        // anchor the top directly to the item-count label with a card-spacing gap so
+        // cards sit snug below the search/title bar instead of inheriting the table's
+        // larger storyboard offset.
+        NSLayoutConstraint.activate([
+            scroll.leadingAnchor.constraint(equalTo: table.leadingAnchor),
+            scroll.trailingAnchor.constraint(equalTo: table.trailingAnchor),
+            // Match the visible horizontal gap between cards: a card's visible content
+            // sits 4pt inside its outer frame, so card-to-card visible gap is
+            // 4 (left inset) + cardSpacing + 4 (right inset) = cardSpacing + 8.
+            // Use the same total here.
+            scroll.topAnchor.constraint(equalTo: itemCountLabel.bottomAnchor, constant: Constants.panel.cardSpacing + 8),
+            scroll.bottomAnchor.constraint(equalTo: table.bottomAnchor),
+        ])
+
+        didAttachCardView = true
+
+        applyLayoutVisibility()
+        reloadActiveView()
+        if useHorizontalLayout, let i = selected.value {
+            cardCollectionView.selectItem(i)
+        }
+    }
+
+    private func onUseHorizontalLayout(_ enabled: Bool) {
+        useHorizontalLayout = enabled
+        guard didAttachCardView else { return }
+        applyLayoutVisibility()
+        reloadActiveView()
+        if let i = selected.value {
+            if enabled { cardCollectionView.selectItem(i) }
+            else { yippyHistoryView.selectItem(i) }
+        }
+    }
+
+    private func applyLayoutVisibility() {
+        let table = yippyHistoryView.enclosingScrollView
+        table?.isHidden = useHorizontalLayout
+        cardScrollView.isHidden = !useHorizontalLayout
+        view.window?.makeFirstResponder(useHorizontalLayout ? cardCollectionView : yippyHistoryView)
     }
     
     func bindHotKeyToYippyWindow(_ hotKey: YippyHotKey, disposeBag: DisposeBag) {
@@ -326,21 +426,37 @@ class YippyViewController: NSViewController, NSWindowDelegate {
     }
     
     func goToNextItem() {
+        guard !useHorizontalLayout else { return }
         incrementSelected()
     }
-    
+
     func goToPreviousItem() {
+        guard !useHorizontalLayout else { return }
+        decrementSelected()
+    }
+
+    func goToNextItemHorizontal() {
+        guard useHorizontalLayout else { return }
+        incrementSelected()
+    }
+
+    func goToPreviousItemHorizontal() {
+        guard useHorizontalLayout else { return }
         decrementSelected()
     }
     
+    private var activeSelectedIndex: Int? {
+        return useHorizontalLayout ? cardCollectionView.selected : yippyHistoryView.selected
+    }
+
     func pasteSelected() {
-        if let selected = self.yippyHistoryView.selected {
+        if let selected = activeSelectedIndex {
             paste(selected: selected)
         }
     }
-    
+
     func deleteSelected() {
-        if let selected = self.yippyHistoryView.selected {
+        if let selected = activeSelectedIndex {
             self.selected.accept(yippyHistory.delete(selected: selected))
         }
     }
@@ -363,11 +479,18 @@ class YippyViewController: NSViewController, NSWindowDelegate {
     }
     
     func shortcutPressed(key: Int) {
-        paste(selected: key)
+        if useHorizontalLayout, didAttachCardView,
+           let first = cardCollectionView.firstVisibleIndex() {
+            let target = first + key
+            guard target < yippyHistory.items.count else { return }
+            paste(selected: target)
+        } else {
+            paste(selected: key)
+        }
     }
     
     func togglePreview() {
-        if let selected = yippyHistoryView.selected {
+        if let selected = activeSelectedIndex {
             isPreviewShowing = !isPreviewShowing
             if isPreviewShowing {
                 State.main.previewHistoryItem.accept(yippyHistory.items[selected])
@@ -432,6 +555,22 @@ class YippyViewController: NSViewController, NSWindowDelegate {
 extension YippyViewController: NSTextFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
         runSearch()
+    }
+}
+
+extension YippyViewController: YippyCardCollectionViewDelegate {
+    func cardCollectionView(_ view: YippyCardCollectionView, selectedDidChange selected: Int?) {
+        self.selected.accept(selected)
+    }
+
+    func cardCollectionView(_ view: YippyCardCollectionView, pasteItemAt index: Int) {
+        guard index >= 0, index < yippyHistory.items.count else { return }
+        paste(selected: index)
+    }
+
+    func cardCollectionView(_ view: YippyCardCollectionView, deleteItemAt index: Int) {
+        guard index >= 0, index < yippyHistory.items.count else { return }
+        self.selected.accept(yippyHistory.delete(selected: index))
     }
 }
 

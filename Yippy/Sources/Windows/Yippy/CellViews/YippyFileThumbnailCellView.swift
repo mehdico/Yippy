@@ -59,6 +59,7 @@ class YippyFileThumbnailCellView: YippyItemBaseCellView, YippyItem {
         itemTextView.attributedText = formatFileUrl(url)
         setupShortcutTextView(at: i)
         setHighlight(isSelected: yippyTableView.isRowSelected(i))
+        applySourceApp(forItem: historyItem)
         
         DispatchQueue.global(qos: .background).async {
             let cgImageRef = QLThumbnailImageCreate(kCFAllocatorDefault, url as CFURL, CGSize(width: 200, height: 200), [kQLThumbnailOptionIconModeKey: false, kQLThumbnailOptionScaleFactorKey: 4] as CFDictionary)

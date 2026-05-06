@@ -24,8 +24,8 @@ class YippyHotKey {
         }
     }
     
-    var longPressStartingInterval: TimeInterval = 0.4
-    var longPressMinInterval: TimeInterval = 0.1
+    var longPressStartingInterval: TimeInterval = 0.22
+    var longPressMinInterval: TimeInterval = 0.045
     var longPressAcceleration: TimeInterval = 2
     
     // MARK: - Private attributes

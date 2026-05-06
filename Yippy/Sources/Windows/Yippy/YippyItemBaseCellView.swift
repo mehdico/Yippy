@@ -25,6 +25,10 @@ class YippyItemBaseCellView: NSTableCellView {
     var contentView: YippyItemContentView!
     var shortcutTextView: YippyItemCellTextView!
     var itemTextView: YippyItemCellTextView!
+
+    let sourceIconView = NSImageView()
+    let sourceNameLabel = NSTextField(labelWithString: "")
+    let sourceStack = NSStackView()
     
     private var lastSetSelected: Bool?
     
@@ -79,6 +83,45 @@ class YippyItemBaseCellView: NSTableCellView {
         
         setupContentView()
         setupShortcutTextView()
+        setupSourceStack()
+    }
+
+    private func setupSourceStack() {
+        sourceIconView.translatesAutoresizingMaskIntoConstraints = false
+        sourceIconView.imageScaling = .scaleProportionallyDown
+        sourceNameLabel.font = NSFont.systemFont(ofSize: 9)
+        sourceNameLabel.textColor = .secondaryLabelColor
+        sourceNameLabel.maximumNumberOfLines = 1
+        sourceNameLabel.lineBreakMode = .byTruncatingTail
+        sourceStack.translatesAutoresizingMaskIntoConstraints = false
+        sourceStack.orientation = .horizontal
+        sourceStack.spacing = 3
+        sourceStack.alignment = .centerY
+        sourceStack.addArrangedSubview(sourceIconView)
+        sourceStack.addArrangedSubview(sourceNameLabel)
+        sourceStack.wantsLayer = true
+        sourceStack.layer?.zPosition = 1
+        sourceStack.isHidden = true
+        contentView.addSubview(sourceStack)
+        NSLayoutConstraint.activate([
+            sourceStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
+            sourceStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
+            sourceIconView.widthAnchor.constraint(equalToConstant: 12),
+            sourceIconView.heightAnchor.constraint(equalToConstant: 12),
+            sourceNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 140),
+        ])
+    }
+
+    func applySourceApp(forItem item: HistoryItem) {
+        if let name = item.getSourceAppName() {
+            sourceStack.isHidden = false
+            sourceNameLabel.stringValue = name
+            sourceIconView.image = item.getSourceAppIcon()
+        } else {
+            sourceStack.isHidden = true
+            sourceNameLabel.stringValue = ""
+            sourceIconView.image = nil
+        }
     }
     
     func setupContentView() {

@@ -15,6 +15,11 @@ struct Constants {
         static let menuWidth: CGFloat = 400
         static let menuHeight: CGFloat = 420
         static let maxCellHeight: CGFloat = 200
+
+        static let horizontalWidth: CGFloat = 720
+        static let horizontalHeight: CGFloat = 220
+        static let cardSize: CGFloat = 150
+        static let cardSpacing: CGFloat = 4
     }
     
     struct statusItemMenu {

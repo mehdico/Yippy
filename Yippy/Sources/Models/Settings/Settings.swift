@@ -22,7 +22,8 @@ struct Settings: Codable, DefaultStorable {
         toggleHotKey: KeyCombo,
         maxHistory: Int,
         showsRichText: Bool,
-        pastesRichText: Bool
+        pastesRichText: Bool,
+        useHorizontalLayout: Bool
     ) {
         self.panelPosition = panelPosition
         self.pasteboardChangeCount = pasteboardChangeCount
@@ -30,6 +31,7 @@ struct Settings: Codable, DefaultStorable {
         self.maxHistory = maxHistory
         self.showsRichText = showsRichText
         self.pastesRichText = pastesRichText
+        self.useHorizontalLayout = useHorizontalLayout
     }
     
     static var main: Settings! {
@@ -53,7 +55,8 @@ struct Settings: Codable, DefaultStorable {
         toggleHotKey: KeyCombo(key: .v, modifiers: [.command, .shift]),
         maxHistory: Constants.settings.maxHistoryItemsDefault,
         showsRichText: true,
-        pastesRichText: true
+        pastesRichText: true,
+        useHorizontalLayout: true
     )
     
     // MARK: - Settings
@@ -69,8 +72,27 @@ struct Settings: Codable, DefaultStorable {
     var showsRichText: Bool
     
     var pastesRichText: Bool
-    
-    
+
+    var useHorizontalLayout: Bool
+
+    // MARK: - Codable
+
+    enum CodingKeys: String, CodingKey {
+        case panelPosition, pasteboardChangeCount, toggleHotKey, maxHistory,
+             showsRichText, pastesRichText, useHorizontalLayout
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.panelPosition = try c.decode(PanelPosition.self, forKey: .panelPosition)
+        self.pasteboardChangeCount = try c.decode(Int.self, forKey: .pasteboardChangeCount)
+        self.toggleHotKey = try c.decode(KeyCombo.self, forKey: .toggleHotKey)
+        self.maxHistory = try c.decode(Int.self, forKey: .maxHistory)
+        self.showsRichText = try c.decode(Bool.self, forKey: .showsRichText)
+        self.pastesRichText = try c.decode(Bool.self, forKey: .pastesRichText)
+        self.useHorizontalLayout = try c.decodeIfPresent(Bool.self, forKey: .useHorizontalLayout) ?? true
+    }
+
     // MARK: - State Binding Methods
     
     func bindPanelPositionTo(state: BehaviorRelay<PanelPosition>) -> Disposable {
@@ -100,6 +122,12 @@ struct Settings: Codable, DefaultStorable {
     func bindPastesRichTextTo(state: Observable<Bool>) -> Disposable {
         return state.bind { (x) in
             Settings.main.pastesRichText = x
+        }
+    }
+
+    func bindUseHorizontalLayoutTo(state: Observable<Bool>) -> Disposable {
+        return state.bind { (x) in
+            Settings.main.useHorizontalLayout = x
         }
     }
 }

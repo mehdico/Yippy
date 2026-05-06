@@ -41,6 +41,7 @@ class YippyTiffCellView: YippyItemBaseCellView, YippyItem {
         setupShortcutTextView(at: i)
         setHighlight(isSelected: yippyTableView.isRowSelected(i))
         tiffView.image = historyItem.getImage()
+        applySourceApp(forItem: historyItem)
     }
     
     static func getItemHeight(withYippyTableView yippyTableView: YippyTableView, forHistoryItem historyItem: HistoryItem) -> CGFloat {

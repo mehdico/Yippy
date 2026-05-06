@@ -33,7 +33,9 @@ class State {
     var showsRichText: BehaviorRelay<Bool>
     
     var pastesRichText: BehaviorRelay<Bool>
-    
+
+    var useHorizontalLayout: BehaviorRelay<Bool>
+
     var disposeBag: DisposeBag
     
     // History
@@ -53,6 +55,7 @@ class State {
         self.launchAtLogin = BehaviorRelay<Bool>(value: LoginServiceKit.isExistLoginItems())
         self.showsRichText = BehaviorRelay<Bool>(value: settings.showsRichText)
         self.pastesRichText = BehaviorRelay<Bool>(value: settings.pastesRichText)
+        self.useHorizontalLayout = BehaviorRelay<Bool>(value: settings.useHorizontalLayout)
         self.currentScreen = BehaviorRelay<NSScreen>(value: Self.getCurrentScreen(forMouseLocation: NSEvent.mouseLocation))
         self.disposeBag = disposeBag
         
@@ -80,6 +83,7 @@ class State {
         settings.bindMaxHistoryTo(state: state.history.maxItems).disposed(by: disposeBag)
         settings.bindShowsRichTextTo(state: state.showsRichText.asObservable()).disposed(by: disposeBag)
         settings.bindPastesRichTextTo(state: state.pastesRichText.asObservable()).disposed(by: disposeBag)
+        settings.bindUseHorizontalLayoutTo(state: state.useHorizontalLayout.asObservable()).disposed(by: disposeBag)
     }
     
     static func monitorPastesRichText(state: State) {

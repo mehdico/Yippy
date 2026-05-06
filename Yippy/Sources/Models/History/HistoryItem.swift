@@ -38,6 +38,10 @@ class HistoryItem: NSObject {
     
     /// File system id. Unique name of the folder contains the data for this item
     let fsId: UUID
+
+    /// Bundle id of the app that was frontmost when this item was copied. May be nil for items
+    /// from older builds (pre-source-tracking) or when the source app couldn't be determined.
+    var sourceBundleId: String?
     
     /// Whether the item is being cached.
     var isCached: Bool {
@@ -60,11 +64,12 @@ class HistoryItem: NSObject {
     ///
     /// - Parameter unsavedData: Pastebaord data that has not yet been saved to disk.
     /// - Parameter cache: `HistoryCache` to use for caching if this item starts using caching.
-    init(unsavedData: [NSPasteboard.PasteboardType: Data], cache: HistoryCache) {
+    init(unsavedData: [NSPasteboard.PasteboardType: Data], cache: HistoryCache, sourceBundleId: String? = nil) {
         self._unsavedData = unsavedData
         self.types = unsavedData.keys.map({$0})
         self.cache = cache
         self.fsId = UUID()
+        self.sourceBundleId = sourceBundleId
     }
     
     /// Creates a `HistoryItem` for an item that is saved to disk.
@@ -72,11 +77,12 @@ class HistoryItem: NSObject {
     /// - Parameter fsId: The unique id of the item.
     /// - Parameter types: The types of pasteboard data that this item contains.
     /// - Parameter cache: `HistoryCache` to use for caching.
-    init(fsId: UUID, types: [NSPasteboard.PasteboardType], cache: HistoryCache) {
+    init(fsId: UUID, types: [NSPasteboard.PasteboardType], cache: HistoryCache, sourceBundleId: String? = nil) {
         self.fsId = fsId
         self._unsavedData = nil
         self.types = types
         self.cache = cache
+        self.sourceBundleId = sourceBundleId
         self.cache.registerItem(withId: fsId)
     }
     
@@ -238,6 +244,21 @@ class HistoryItem: NSObject {
         return NSColor(from: pasteboard)
     }
     
+    func getSourceAppName() -> String? {
+        guard let id = sourceBundleId,
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: id) else { return nil }
+        let bundle = Bundle(url: url)
+        return bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+            ?? bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+            ?? url.deletingPathExtension().lastPathComponent
+    }
+
+    func getSourceAppIcon() -> NSImage? {
+        guard let id = sourceBundleId,
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: id) else { return nil }
+        return NSWorkspace.shared.icon(forFile: url.path)
+    }
+
     private func isStringLink(string: String) -> Bool {
         let types: NSTextCheckingResult.CheckingType = [.link]
         let detector = try? NSDataDetector(types: types.rawValue)

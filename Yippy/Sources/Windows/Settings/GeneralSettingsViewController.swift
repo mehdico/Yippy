@@ -16,15 +16,18 @@ class GeneralSettingsViewController: NSViewController {
     @IBOutlet var maxHistoryItemsPopUpButton: NSPopUpButton!
     @IBOutlet var showsRichTextButton: NSButton!
     @IBOutlet var pastesRichTextButton: NSButton!
-    
+
+    private var horizontalLayoutButton: NSButton!
+
     private var disposeBag = DisposeBag()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupMaxHistoryItemsPopUpButton()
         setupShowsRichTextButton()
         setupPastesRichTextButton()
+        setupHorizontalLayoutButton()
     }
     
     // MARK: Setup view
@@ -86,5 +89,26 @@ class GeneralSettingsViewController: NSViewController {
     
     @objc private func onPastesRichTextButtonClicked() {
         State.main.pastesRichText.accept(pastesRichTextButton.state == .on)
+    }
+
+    private func setupHorizontalLayoutButton() {
+        let button = NSButton(checkboxWithTitle: "Use horizontal layout (cards)", target: self, action: #selector(onHorizontalLayoutButtonClicked))
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+
+        let anchor = pastesRichTextButton ?? showsRichTextButton
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: anchor!.leadingAnchor),
+            button.topAnchor.constraint(equalTo: anchor!.bottomAnchor, constant: 8)
+        ])
+
+        horizontalLayoutButton = button
+        State.main.useHorizontalLayout.subscribe(onNext: { [weak self] in
+            self?.horizontalLayoutButton.state = $0 ? .on : .off
+        }).disposed(by: disposeBag)
+    }
+
+    @objc private func onHorizontalLayoutButtonClicked() {
+        State.main.useHorizontalLayout.accept(horizontalLayoutButton.state == .on)
     }
 }
